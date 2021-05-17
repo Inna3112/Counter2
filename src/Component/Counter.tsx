@@ -9,7 +9,7 @@ type PropsType = {
     maxError: boolean
     increaseInc: (maxValue: number) => void
     setInNumMinValue: (minValue: number) => void
-    setMode: (mode: boolean) => void
+    changeMode: (mode: boolean) => void
 }
 
 export function Counter(props: PropsType) {
@@ -17,7 +17,7 @@ export function Counter(props: PropsType) {
 
     const onIncHandler = () => props.increaseInc(props.maxValue)
     const onResetHandler = () => props.setInNumMinValue(props.minValue)
-    const onSetHandler = () => props.setMode(true)
+    const onSetHandler = () => props.changeMode(true)
 
 
     return (

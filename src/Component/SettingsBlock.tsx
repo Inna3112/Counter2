@@ -14,7 +14,7 @@ type PropsType = {
     setMaxError: (error: boolean) => void
     setInNumMinValue: (minValue: number) => void
     increaseInc: (maxValue: number) => void
-    setMode: (mode: boolean) => void
+    changeMode: (mode: boolean) => void
 }
 
 export function SettingsBlock(props: PropsType) {
@@ -22,7 +22,7 @@ export function SettingsBlock(props: PropsType) {
 
     const onClickHandler = () => {
         props.setInNumMinValue(props.minValue)
-        props.setMode(false)
+        props.changeMode(false)
     }
 
     const startInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {

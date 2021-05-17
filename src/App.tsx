@@ -9,7 +9,7 @@ function App() {
     const [maxValue, setMaxValue] = useState<number>(0)
     const [minError, setMinError] = useState<boolean>(false)
     const [maxError, setMaxError] = useState<boolean>(false)
-    const [mode, setMode] = useState<boolean>(false)
+    const [mode, changeMode] = useState<boolean>(false)
 
     useEffect(() => {
         let numAsString = localStorage.getItem('num')
@@ -45,7 +45,7 @@ function App() {
         setNum(minValue)
     }
 
-    const setModeHandler = (mode: boolean) => {
+    const changeModeHandler = (mode: boolean) => {
         if (mode) {
             return <SettingsBlock num={num}
                                   minValue={minValue}
@@ -58,7 +58,7 @@ function App() {
                                   setMaxError={setMaxError}
                                   setInNumMinValue={setInNumMinValue}
                                   increaseInc={increaseInc}
-                                  setMode={setMode}
+                                  changeMode={changeMode}
             />
         } else {
             return <Counter num={num}
@@ -68,14 +68,14 @@ function App() {
                             minValue={minValue}
                             minError={minError}
                             maxError={maxError}
-                            setMode={setMode}
+                            changeMode={changeMode}
             />
         }
     }
 
     return (
         <div className="App">
-            {setModeHandler(mode)}
+            {changeModeHandler(mode)}
         </div>
     )
 }
