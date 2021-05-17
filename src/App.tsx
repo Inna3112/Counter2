@@ -75,7 +75,7 @@ function App() {
 
     return (
         <div className="App">
-            {changeModeHandler(mode)}
+           {changeModeHandler(mode)}
         </div>
     )
 }

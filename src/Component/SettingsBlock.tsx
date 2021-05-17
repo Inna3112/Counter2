@@ -27,12 +27,12 @@ export function SettingsBlock(props: PropsType) {
 
     const startInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         props.setMinValue(JSON.parse(e.currentTarget.value))
-        if (JSON.parse(e.currentTarget.value) < 0) {
+        if (+e.currentTarget.value < 0) {
             props.setMinError(true)
-        }else if (JSON.parse(e.currentTarget.value) === props.maxValue) {
+        }else if (+e.currentTarget.value === props.maxValue) {
             props.setMinError(true)
             props.setMaxError(true)
-        } else if (JSON.parse(e.currentTarget.value) !== props.maxValue) {
+        } else if (+e.currentTarget.value !== props.maxValue) {
             props.setMinError(false)
             props.setMaxError(false)
         } else {
@@ -41,12 +41,12 @@ export function SettingsBlock(props: PropsType) {
     }
     const maxInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         props.setMaxValue(JSON.parse(e.currentTarget.value))
-        if (JSON.parse(e.currentTarget.value) < 0) {
+        if (+e.currentTarget.value < 0) {
             props.setMaxError(true)
-        }else if (JSON.parse(e.currentTarget.value) === props.minValue) {
+        }else if (+e.currentTarget.value === props.minValue) {
             props.setMaxError(true)
             props.setMinError(true)
-        } else if (JSON.parse(e.currentTarget.value) !== props.minValue) {
+        } else if (+e.currentTarget.value !== props.minValue) {
             props.setMaxError(false)
             props.setMinError(false)
         } else {
