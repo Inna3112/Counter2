@@ -1,36 +1,40 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Batton} from "./Batton";
-
-type PropsType = {
-    num: number
-    maxValue: number
-    minValue: number
-    minError: boolean
-    maxError: boolean
-    increaseInc: (maxValue: number) => void
-    setInNumMinValue: (minValue: number) => void
-    changeMode: (mode: boolean) => void
-}
-
-export function Counter(props: PropsType) {
+import {useDispatch, useSelector} from "react-redux";
+import {changeModeHandlerAC, increaseIncrementAC, setInNumMinValueAC} from "../store/reducer";
+import {AppRootStateType} from "../store/store";
 
 
-    const onIncHandler = () => props.increaseInc(props.maxValue)
-    const onResetHandler = () => props.setInNumMinValue(props.minValue)
-    const onSetHandler = () => props.changeMode(true)
+export function Counter() {
+
+    const num = useSelector<AppRootStateType, number>(state => state.counter['num'])
+    const minValue= useSelector<AppRootStateType, number>(state => state.counter['minValue'])
+    const maxValue= useSelector<AppRootStateType, number>(state => state.counter['maxValue'])
+
+    const dispatch = useDispatch()
+
+    const onIncHandler = () => {
+        dispatch(increaseIncrementAC(maxValue))
+    }
+    const onResetHandler = () => {
+        dispatch(setInNumMinValueAC(minValue))
+    }
+    const onSetHandler = () => {
+        dispatch(changeModeHandlerAC(true))
+    }
 
 
     return (
         <div className="counter">
-            <div className={props.num === props.maxValue
+            <div className={num === maxValue
                 ? `${'num'} ${'hotMessage'}` : 'num'}>
 
-                { props.num }
+                { num }
 
             </div>
             <div className="buttons">
-                <Batton title={'inc'} onClickHandler={onIncHandler} disabled={props.num === props.maxValue}/>
-                <Batton title={'reset'} onClickHandler={onResetHandler} disabled={props.num === props.minValue}/>
+                <Batton title={'inc'} onClickHandler={onIncHandler} disabled={num === maxValue}/>
+                <Batton title={'reset'} onClickHandler={onResetHandler} disabled={num === minValue}/>
                 <Batton title={'set'} onClickHandler={onSetHandler} disabled={undefined}/>
             </div>
         </div>

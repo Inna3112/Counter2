@@ -1,56 +1,56 @@
 import React, {ChangeEvent} from 'react';
 import {Batton} from "./Batton";
+import {useDispatch, useSelector} from "react-redux";
+import {AppRootStateType} from "../store/store";
+import {
+    changeModeHandlerAC,
+    setInNumMinValueAC, setMaxErrorAC, setMaxValueAC,
+    setMinErrorAC,
+    setMinValueAC
+} from "../store/reducer";
 
 
-type PropsType = {
-    num: number
-    minValue: number
-    maxValue: number
-    minError: boolean
-    maxError: boolean
-    setMinValue: (value: number) => void
-    setMaxValue: (value: number) => void
-    setMinError: (error: boolean) => void
-    setMaxError: (error: boolean) => void
-    setInNumMinValue: (minValue: number) => void
-    increaseInc: (maxValue: number) => void
-    changeMode: (mode: boolean) => void
-}
 
-export function SettingsBlock(props: PropsType) {
+export function SettingsBlock() {
 
+    const minValue= useSelector<AppRootStateType, number>(state => state.counter['minValue'])
+    const maxValue= useSelector<AppRootStateType, number>(state => state.counter['maxValue'])
+    const minError= useSelector<AppRootStateType, boolean>(state => state.counter['minError'])
+    const maxError= useSelector<AppRootStateType, boolean>(state => state.counter['maxError'])
+
+    const dispatch = useDispatch()
 
     const onClickHandler = () => {
-        props.setInNumMinValue(props.minValue)
-        props.changeMode(false)
+        dispatch(setInNumMinValueAC(minValue))
+        dispatch(changeModeHandlerAC(false))
     }
 
     const startInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        props.setMinValue(JSON.parse(e.currentTarget.value))
+        dispatch(setMinValueAC(+e.currentTarget.value))
         if (+e.currentTarget.value < 0) {
-            props.setMinError(true)
-        }else if (+e.currentTarget.value === props.maxValue) {
-            props.setMinError(true)
-            props.setMaxError(true)
-        } else if (+e.currentTarget.value !== props.maxValue) {
-            props.setMinError(false)
-            props.setMaxError(false)
+            dispatch(setMinErrorAC(true))
+        }else if (+e.currentTarget.value === maxValue) {
+            dispatch(setMinErrorAC(true))
+            dispatch(setMaxErrorAC(true))
+        } else if (+e.currentTarget.value !== maxValue) {
+            dispatch(setMinErrorAC(false))
+            dispatch(setMaxErrorAC(false))
         } else {
-            props.setMinError(false)
+            dispatch(setMinErrorAC(false))
         }
     }
     const maxInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        props.setMaxValue(JSON.parse(e.currentTarget.value))
+        dispatch(setMaxValueAC(+e.currentTarget.value))
         if (+e.currentTarget.value < 0) {
-            props.setMaxError(true)
-        }else if (+e.currentTarget.value === props.minValue) {
-            props.setMaxError(true)
-            props.setMinError(true)
-        } else if (+e.currentTarget.value !== props.minValue) {
-            props.setMaxError(false)
-            props.setMinError(false)
+            dispatch(setMaxErrorAC(true))
+        }else if (+e.currentTarget.value === minValue) {
+            dispatch(setMinErrorAC(true))
+            dispatch(setMaxErrorAC(true))
+        } else if (+e.currentTarget.value !== minValue) {
+            dispatch(setMinErrorAC(false))
+            dispatch(setMaxErrorAC(false))
         } else {
-            props.setMaxError(false)
+            dispatch(setMaxErrorAC(true))
         }
     }
 
@@ -59,17 +59,17 @@ export function SettingsBlock(props: PropsType) {
                 <div className={'num'}>
                     <div>
                         Start value
-                        <input className={props.minError ? `${'input'} ${'error'}` : 'input'}
+                        <input className={minError ? `${'input'} ${'error'}` : 'input'}
                                type='number'
-                               value={props.minValue}
+                               value={minValue}
                                onChange={startInputChangeHandler}
                         />
                     </div>
                     <div>
                         Max value
-                        <input className={props.maxError ? `${'input'} ${'error'}` : 'input'}
+                        <input className={maxError ? `${'input'} ${'error'}` : 'input'}
                                type='number'
-                               value={props.maxValue}
+                               value={maxValue}
                                onChange={maxInputChangeHandler}
                         />
                     </div>
@@ -78,7 +78,7 @@ export function SettingsBlock(props: PropsType) {
                 <div className="buttons">
                     <Batton title={'Set'}
                             onClickHandler={onClickHandler}
-                            disabled={props.minValue < 0 || props.maxValue < 0 || props.minValue >= props.maxValue}/>
+                            disabled={minValue < 0 || maxValue < 0 || minValue >= maxValue}/>
                 </div>
             </div>
     );
