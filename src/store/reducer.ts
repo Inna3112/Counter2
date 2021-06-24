@@ -1,4 +1,4 @@
-export type InitialStateType = typeof initialState
+
 type IncreaseIncrementAT = {
     type: 'INCREASE-INCREMENT'
     maxValue: number
@@ -27,8 +27,22 @@ type setMaxErrorAT = {
     type: 'SET-MAX-ERROR'
     error: boolean
 }
+type setNumFromLocalStorageAT = {
+    type: 'SET-NUM-FROM-LOCAL-STORAGE'
+    num: number
+}
+type setMinValueFromLocalStorageAT = {
+    type: 'SET-MIN-VALUE-FROM-LOCAL-STORAGE',
+    minValue: number
+}
+type setMaxValueFromLocalStorageAT = {
+    type: 'SET-MAX-VALUE-FROM-LOCAL-STORAGE',
+    maxValue: number
+}
+
 type ActionType = IncreaseIncrementAT | SetInNumMinValueAT | ChangeModeHandlerAT
-    | SetsMinValueAT | SetsMaxValueAT | setMinErrorAT | setMaxErrorAT
+    | SetsMinValueAT | SetsMaxValueAT | setMinErrorAT | setMaxErrorAT | setNumFromLocalStorageAT
+    | setMinValueFromLocalStorageAT | setMaxValueFromLocalStorageAT
 const initialState = {
     num: 0,
     minValue: 0,
@@ -38,8 +52,8 @@ const initialState = {
     mode: false,
 }
 
-export const counterReducer = (state = initialState, action: ActionType)=> {
-    switch (action.type){
+export const counterReducer = (state = initialState, action: ActionType) => {
+    switch (action.type) {
         case "INCREASE-INCREMENT":
             return {
                 ...state,
@@ -73,12 +87,27 @@ export const counterReducer = (state = initialState, action: ActionType)=> {
                 ...state,
                 maxError: action.error
             }
+        case "SET-NUM-FROM-LOCAL-STORAGE":
+            return {
+                ...state,
+                value: action.num
+            }
+        case "SET-MIN-VALUE-FROM-LOCAL-STORAGE":
+            return {
+                ...state,
+                value: action.minValue
+            }
+        case "SET-MAX-VALUE-FROM-LOCAL-STORAGE":
+            return {
+                ...state,
+                value: action.maxValue
+            }
         default:
             return state
     }
 }
 
- export const increaseIncrementAC = (maxValue: number): IncreaseIncrementAT => {
+export const increaseIncrementAC = (maxValue: number): IncreaseIncrementAT => {
     return {
         type: 'INCREASE-INCREMENT',
         maxValue
@@ -118,5 +147,23 @@ export const setMaxErrorAC = (error: boolean): setMaxErrorAT => {
     return {
         type: 'SET-MAX-ERROR',
         error
+    }
+}
+export const setNumFromLocalStorageAC = (num: number): setNumFromLocalStorageAT => {
+    return {
+        type: 'SET-NUM-FROM-LOCAL-STORAGE',
+        num
+    }
+}
+export const setMinValueFromLocalStorageAC = (minValue: number): setMinValueFromLocalStorageAT => {
+    return {
+        type: 'SET-MIN-VALUE-FROM-LOCAL-STORAGE',
+        minValue
+    }
+}
+export const setMaxValueFromLocalStorageAC = (maxValue: number): setMaxValueFromLocalStorageAT => {
+    return {
+        type: 'SET-MAX-VALUE-FROM-LOCAL-STORAGE',
+        maxValue
     }
 }
