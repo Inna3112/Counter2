@@ -3,9 +3,8 @@ import {Batton} from "./Batton";
 import {useDispatch, useSelector} from "react-redux";
 import {AppRootStateType} from "../store/store";
 import {
-    changeModeHandlerAC,
-    setInNumMinValueAC, setMaxErrorAC, setMaxValueAC,
-    setMinErrorAC,
+    changeModeHandlerAC, setErrorAC,
+    setInNumMinValueAC, setMaxValueAC,
     setMinValueAC
 } from "../store/reducer";
 
@@ -13,10 +12,9 @@ import {
 
 export function SettingsBlock() {
 
-    const minValue= useSelector<AppRootStateType, number>(state => state.counter['minValue'])
-    const maxValue= useSelector<AppRootStateType, number>(state => state.counter['maxValue'])
-    const minError= useSelector<AppRootStateType, boolean>(state => state.counter['minError'])
-    const maxError= useSelector<AppRootStateType, boolean>(state => state.counter['maxError'])
+    const minValue= useSelector<AppRootStateType, number>(state => state.counter.minValue)
+    const maxValue= useSelector<AppRootStateType, number>(state => state.counter.maxValue)
+    const error= useSelector<AppRootStateType, boolean>(state => state.counter.error)
 
     const dispatch = useDispatch()
 
@@ -26,32 +24,24 @@ export function SettingsBlock() {
     }
 
     const startInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(setMinValueAC(+e.currentTarget.value))
         if (+e.currentTarget.value < 0) {
-            dispatch(setMinErrorAC(true))
-        }else if (+e.currentTarget.value === maxValue) {
-            dispatch(setMinErrorAC(true))
-            dispatch(setMaxErrorAC(true))
+            dispatch(setErrorAC(true))
+        } else if (+e.currentTarget.value >= maxValue) {
+            dispatch(setErrorAC(true))
         } else if (+e.currentTarget.value !== maxValue) {
-            dispatch(setMinErrorAC(false))
-            dispatch(setMaxErrorAC(false))
-        } else {
-            dispatch(setMinErrorAC(false))
+            dispatch(setErrorAC(false))
         }
+        dispatch(setMinValueAC(+e.currentTarget.value))
     }
     const maxInputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        dispatch(setMaxValueAC(+e.currentTarget.value))
-        if (+e.currentTarget.value < 0) {
-            dispatch(setMaxErrorAC(true))
+        if (+e.currentTarget.value <= 0) {
+            dispatch(setErrorAC(true))
         }else if (+e.currentTarget.value === minValue) {
-            dispatch(setMinErrorAC(true))
-            dispatch(setMaxErrorAC(true))
+            dispatch(setErrorAC(true))
         } else if (+e.currentTarget.value !== minValue) {
-            dispatch(setMinErrorAC(false))
-            dispatch(setMaxErrorAC(false))
-        } else {
-            dispatch(setMaxErrorAC(true))
+            dispatch(setErrorAC(false))
         }
+        dispatch(setMaxValueAC(+e.currentTarget.value))
     }
 
     return (
@@ -59,7 +49,7 @@ export function SettingsBlock() {
                 <div className={'num'}>
                     <div>
                         Start value
-                        <input className={minError ? `${'input'} ${'error'}` : 'input'}
+                        <input className={error ? `${'input'} ${'error'}` : 'input'}
                                type='number'
                                value={minValue}
                                onChange={startInputChangeHandler}
@@ -67,14 +57,13 @@ export function SettingsBlock() {
                     </div>
                     <div>
                         Max value
-                        <input className={maxError ? `${'input'} ${'error'}` : 'input'}
+                        <input className={error ? `${'input'} ${'error'}` : 'input'}
                                type='number'
                                value={maxValue}
                                onChange={maxInputChangeHandler}
                         />
                     </div>
                 </div>
-
                 <div className="buttons">
                     <Batton title={'Set'}
                             onClickHandler={onClickHandler}
